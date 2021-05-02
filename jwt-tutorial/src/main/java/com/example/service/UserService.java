@@ -25,6 +25,7 @@ public class UserService {
 
     @Transactional
     public User signup(UserDto userDto) {
+    	//username이 db에 존재하지 않으면 Authority와 User 정보를 생성해서 UserRepository의 save메소드를 통해 DB에 정보를 저장한다.
         if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
@@ -45,11 +46,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    //username을 기준으로 정보를 가져온다.
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities(String username) {
         return userRepository.findOneWithAuthoritiesByUsername(username);
     }
 
+    //SecurityContext에 저장된 username의 정보만 가져온다.
     @Transactional(readOnly = true)
     public Optional<User> getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
