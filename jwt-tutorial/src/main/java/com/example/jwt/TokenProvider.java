@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+//stpe1 토큰의 생성, 유효성검사
 public class TokenProvider implements InitializingBean {
 
 
@@ -45,12 +46,14 @@ public class TokenProvider implements InitializingBean {
 		this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
 	}
 	   
+	//토큰decode
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		byte[] keyBytes = Decoders.BASE64.decode(secret);
 	    this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 	
+	//토큰생성
 	public String createToken(Authentication authentication) {
 		String authorities = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
@@ -67,6 +70,7 @@ public class TokenProvider implements InitializingBean {
 				.compact();
 	}
 	
+	//토큰 정보를 이용해 Authentication 객체를 리턴하는 메소드
 	public Authentication getAuthentication(String token) {
 		Claims claims = Jwts
 				.parserBuilder()

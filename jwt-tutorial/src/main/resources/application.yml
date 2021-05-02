@@ -28,4 +28,4 @@ jwt:
 
 logging:
   level:
-    me.silvernine: DEBUG
+    com.example: DEBUG

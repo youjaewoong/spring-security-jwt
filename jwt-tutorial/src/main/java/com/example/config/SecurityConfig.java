@@ -16,7 +16,8 @@ import com.example.jwt.JwtSecurityConfig;
 import com.example.jwt.TokenProvider;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize 어노테이션을 메소드단위로 추가하기위해서 적용
+//step4 jwt 5개의 클래스를 추가한다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final TokenProvider tokenProvider;
@@ -40,12 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers(
-                        "/h2-console/**"
-                        ,"/favicon.ico"
-                        ,"/error"
-                );
+        web
+        	.ignoring()
+            .antMatchers(
+                    "/h2-console/**"
+                    ,"/favicon.ico"
+                    ,"/error"
+            );
     }
     
     @Override
@@ -74,7 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .antMatchers("/api/hello").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/signup").permitAll()
-
             .anyRequest().authenticated()
 
             .and()
